@@ -1,7 +1,6 @@
 using SimpleRomanCalculator;
 using SimpleRomanCalculator.Converter;
 using SimpleRomanCalculator.Parser;
-
 using RomanCalculatorREST.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 
