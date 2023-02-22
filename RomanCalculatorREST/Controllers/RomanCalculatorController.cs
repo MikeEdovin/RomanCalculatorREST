@@ -1,26 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
+using RomanCalculatorREST.Entities;
 using SimpleRomanCalculator;
 
 namespace RomanCalculatorREST.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("calculate")]
     public class RomanCalculatorController : ControllerBase
     {
+      
+        [HttpPost]
+        public async Task<IResult> Calculate(ICalculator calculator,JsonInput jsonInput)
+        {
+                try
+                {
+                    string? expression = jsonInput.Input;
+                    var result = calculator.Evaluate(expression);
+                    return Results.Json(new JsonOutput(result));
+                }
+                catch(ArgumentException e)
+                {
+                    return Results.BadRequest(e.Message);
+                }
+        }
         
-
-        private readonly ILogger<RomanCalculatorController> _logger;
-
-        public RomanCalculatorController(ILogger<RomanCalculatorController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpPost(Name = "Calculate")]
-        public string Calculate(HttpContext context)
-        {
-           ICalculator calculator=context.RequestServices.GetService<ICalculator>();
-            calculator.Evaluate(context.Request.Body.);
-        }
     }
 }

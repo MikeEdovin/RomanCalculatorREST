@@ -2,18 +2,19 @@ using SimpleRomanCalculator;
 using SimpleRomanCalculator.Converter;
 using SimpleRomanCalculator.Parser;
 
+using RomanCalculatorREST.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+
 internal class Program
 {
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-       addCalculatorServices(builder);
-
-        // Add services to the container.
+        addCalculatorServices(builder);
 
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -25,10 +26,23 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+/*
+ * Using MinimalAPI
+        app.MapPost("calculate", (JsonInput jsonInput,ICalculator calculator) =>
+        {
+            try
+            {
+                string input = jsonInput.Input;
+                string result = calculator.Evaluate(input);
+                return Results.Json(new JsonOutput(result));
+            }catch(ArgumentException e)
+            {
+                return Results.BadRequest(e.Message);
+            }
+        });
+*/
+       
         app.UseHttpsRedirection();
-
-        app.UseAuthorization();
 
         app.MapControllers();
 
