@@ -3,7 +3,8 @@ using SimpleRomanCalculator.Converter;
 using SimpleRomanCalculator.Parser;
 using RomanCalculatorREST.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
-
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 internal class Program
 {
@@ -18,11 +19,25 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
-        
+       
+
+        app.UseExceptionHandler(app => app.Run(async context =>
+        {
+        var exception = context.Features
+        .Get<IExceptionHandlerPathFeature>()
+        .Error;
+        var response = new { error = exception.Message };
+            context.Response.StatusCode = 400;
+        await context.Response.WriteAsJsonAsync(response); 
+        }));
+
+
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            
         }
         app.UseHttpsRedirection();
         app.MapControllers();
