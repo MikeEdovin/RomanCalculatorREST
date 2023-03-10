@@ -1,13 +1,8 @@
 
-using SimpleRomanCalculator;
+using Moq;
 using RomanCalculatorREST.Controllers;
 using RomanCalculatorREST.Entities;
-using Microsoft.AspNetCore.Http;
-using System.Net.Http.Json;
-using Moq;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
-using Microsoft.AspNetCore.Mvc;
+using SimpleRomanCalculator;
 
 namespace RomanCalculatorRestTest
 {
@@ -24,33 +19,28 @@ namespace RomanCalculatorRestTest
          
             var controller = new RomanCalculatorController(mockICalculator.Object);
            //Act
-           var result = controller.Calculate(new JsonInput(input));
-            
-            
-           
-           //Assert
-           Assert.NotNull(controller);
-           Assert.IsType<JsonHttpResult<JsonOutput>>(result);
-           
-
+           var response = controller.Calculate(new JsonInput(input));
+  
+            //Assert
+            Assert.NotNull(controller);
+            Assert.Equal("JsonOutput",response.Value.GetType().Name);
+            Assert.True(response.Value.Output!=null);
+            Assert.True(response.Value.Output.Equals(output));
         }
 
         [Fact]
         public void RomanCalculatorControllerShouldReturnBadRequest()
         {
-            var mockICalculator = new Mock<ICalculator>();
-           
-            mockICalculator.Setup(calc => calc.Evaluate("")).Throws<ArgumentException>();
+           var mockICalculator = new Mock<ICalculator>();
+           mockICalculator.Setup(calc => calc.Evaluate("")).Throws<ArgumentException>();
+           var controller = new RomanCalculatorController(mockICalculator.Object);
 
-
-            var controller = new RomanCalculatorController(mockICalculator.Object);
             //Act
-            var badRequestResult = controller.Calculate(new JsonInput(""));
-
+           var response = controller.Calculate(new JsonInput(""));
+          
             //Assert
-            Assert.NotNull(controller);
-            Assert.IsType<BadRequest>(badRequestResult);
-            
+           Assert.NotNull(controller);
+           Assert.Equal("BadRequestObjectResult",response.Result.GetType().Name); 
         }
     }
 }

@@ -13,44 +13,19 @@ internal class Program
 
         addCalculatorServices(builder);
 
-        //builder.Services.AddControllers();
+        builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
+        
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
- // Using MinimalAPI
-        app.MapPost("calculate", (JsonInput jsonInput,ICalculator calculator) =>
-        {
-            try
-            {
-                string? input = jsonInput.Input;
-                string result = calculator.Evaluate(input);
-                return Results.Json(new JsonOutput(result), statusCode: 200);
-                //return Results.Ok(new JsonOutput(result));
-
-            }
-            catch (ArgumentException e)
-            {
-                return Results.BadRequest(e.Message);
-            }
-
-        });
-
-        
-
-       
         app.UseHttpsRedirection();
-
-        //app.MapControllers();
-
+        app.MapControllers();
         app.Run();
     }
 
