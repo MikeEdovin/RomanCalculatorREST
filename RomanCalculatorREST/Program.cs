@@ -42,15 +42,14 @@ internal class Program
     private static async Task GotException(HttpContext context)
     {
         var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+        var response = new { error = exception.Message };
         if (exception is ArgumentException)
         {
-            var response = new { error = exception.Message };
             context.Response.StatusCode = 400;
             await context.Response.WriteAsJsonAsync(response);
         }
         else
         {
-            var response = new { error = exception.Message };
             context.Response.StatusCode = 500;
             await context.Response.WriteAsJsonAsync(response);
         }
