@@ -15,11 +15,10 @@ namespace RomanCalculatorRestTest
             string input = "XXX-IV";
             string output= "XXVI";    
             mockICalculator.Setup(calc=>calc.Evaluate(input)).Returns(output);
-
-         
             var controller = new RomanCalculatorController(mockICalculator.Object);
+
            //Act
-           var response = controller.Calculate(new JsonInput(input));
+            var response = controller.Calculate(new JsonInput(input));
   
             //Assert
             Assert.NotNull(controller);
