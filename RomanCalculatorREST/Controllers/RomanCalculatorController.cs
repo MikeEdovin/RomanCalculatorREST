@@ -15,17 +15,9 @@ namespace RomanCalculatorREST.Controllers
         [HttpPost]
         public ActionResult<JsonOutput> Calculate(JsonInput jsonInput)
         {
-            //try
-            //{
                 string? expression = jsonInput.Input;
                 var result = calculator.Evaluate(expression);
                 return new JsonOutput(result);  
-           // }
-           // catch (ArgumentException e)
-            //{
-            //    return BadRequest(e.Message);
-            //}
         }
-        
     }
 }

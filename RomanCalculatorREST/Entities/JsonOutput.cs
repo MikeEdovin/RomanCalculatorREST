@@ -4,9 +4,6 @@
     {
         public string? Output { get; set; }
         public JsonOutput() { }
-        public JsonOutput(string output)
-        {
-            Output = output;
-        }
+        public JsonOutput(string output) { Output = output; }
     }
 }
