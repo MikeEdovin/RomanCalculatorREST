@@ -31,16 +31,14 @@ namespace RomanCalculatorRestTest
         [Fact]
         public void RomanCalculatorControllerShouldReturnBadRequest()
         {
-           var mockICalculator = new Mock<ICalculator>();
-           mockICalculator.Setup(calc => calc.Evaluate("")).Throws<ArgumentException>();
-           var controller = new RomanCalculatorController(mockICalculator.Object);
+            var mockICalculator = new Mock<ICalculator>();
+            mockICalculator.Setup(calc => calc.Evaluate("")).Throws<ArgumentException>();
+            var controller = new RomanCalculatorController(mockICalculator.Object);
 
-            //Act
-           var response = controller.Calculate(new JsonInput(""));
-          
             //Assert
-           Assert.NotNull(controller);
-           Assert.Equal("BadRequestObjectResult",response.Result.GetType().Name); 
+            Assert.NotNull(controller);
+            Assert.Throws<ArgumentException>(() => controller.Calculate(new JsonInput("")));
+
         }
     }
 }
